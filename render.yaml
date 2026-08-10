@@ -1,9 +1,9 @@
 services:
   - type: web
     runtime: static
-    name: bitcoin-explorer-delivery-2
+    name: bitcoin-explorer-delivery-3
     repo: https://github.com/JigSawPu/python-hello-world
-    branch: bitcoin-explorer/delivery-2
+    branch: bitcoin-explorer/delivery-3
     buildCommand: npm install --no-audit --no-fund && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false

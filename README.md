@@ -1,24 +1,23 @@
 # Bitcoin Explorer
 
-Static-first Bitcoin blockchain explorer built with Vite, TypeScript, Preact, React Router, TanStack Query, Zod, CSS, Vitest, and vite-plugin-pwa.
+Static-first Bitcoin blockchain explorer built with Vite, TypeScript, Preact, React Router, TanStack Query, Zod, bitcoinjs-lib, CSS, Vitest, and vite-plugin-pwa.
 
-## Milestone 1 status
+## Milestone 1 delivery status
 
-### Delivery 1 — complete
-- repository-ready Vite/Preact/TypeScript foundation
-- responsive shell and placeholder routes
-- GitHub Actions CI and Render deployment config
-- PWA foundation
+- Delivery 1: repository/deployment foundation — complete
+- Delivery 2: network + Esplora provider infrastructure — complete
+- Delivery 3: search parsing/resolution + feedback states — current
+- Delivery 4: automated validation and Milestone 1 hardening — next
 
-### Delivery 2 — current
-- mainnet, testnet, and signet configuration
-- persisted network selector
-- BitcoinDataProvider abstraction
-- Esplora provider implementation
-- request timeout and normalized API errors
-- Zod response validation
-- TanStack Query defaults and network-scoped chain-tip query
-- visible API connection state and current tip height
+## Delivery 3 search behavior
+
+- digits → block height, checked against the live chain tip and resolved to a block hash
+- 64 hexadecimal characters → transaction first, then block hash
+- Bitcoin addresses → checksum/network validation with `bitcoinjs-lib`, then provider resolution
+- invalid input → local feedback without an unnecessary network call
+- provider failures → normalized rate-limit, timeout, network, and invalid-response messages
+
+Mainnet, testnet, and signet selection persists in localStorage and scopes live Esplora requests.
 
 ## Commands
 
@@ -37,12 +36,12 @@ VITE_TESTNET_API_URL=https://blockstream.info/testnet/api
 VITE_SIGNET_API_URL=https://blockstream.info/signet/api
 ```
 
-These values are public browser endpoints, not secrets.
+These browser endpoint URLs are public configuration, not secrets.
 
-## Deployment
+## Render
 
-Render build command: `npm install --no-audit --no-fund && npm run build`
+Build: `npm install --no-audit --no-fund && npm run build`
 
 Publish directory: `dist`
 
-`render.yaml` includes the required SPA rewrite from `/*` to `/index.html`.
+The Blueprint file includes an SPA rewrite from `/*` to `/index.html` for direct React Router URLs.

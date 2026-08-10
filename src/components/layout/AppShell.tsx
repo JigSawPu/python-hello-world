@@ -3,6 +3,7 @@ import type { BitcoinNetwork } from '../../domain/network';
 import { NETWORKS } from '../../features/network/network.config';
 import { useBitcoinNetwork } from '../../features/network/network.context';
 import { useChainTip } from '../../hooks/useChainTip';
+import { SearchForm } from '../search/SearchForm';
 
 const navItems = [
   ['/', 'Home'],
@@ -38,10 +39,7 @@ export function AppShell() {
           </label>
         </div>
 
-        <form className="search-shell" onSubmit={(event) => event.preventDefault()} aria-label="Explorer search">
-          <input aria-label="Search blocks, transactions, or addresses" placeholder="Search block, transaction, or address" disabled />
-          <button type="submit" disabled>Search</button>
-        </form>
+        <SearchForm />
 
         <nav className="main-nav" aria-label="Primary navigation">
           {navItems.map(([to, label]) => (
@@ -63,7 +61,7 @@ export function AppShell() {
       </main>
 
       <footer className="app-footer">
-        <span>Esplora provider foundation</span>
+        <span>Search + Esplora provider foundation</span>
         <span>Network: {NETWORKS[network].label}</span>
         <span>API: {apiState}</span>
       </footer>
