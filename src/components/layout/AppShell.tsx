@@ -30,7 +30,12 @@ export function AppShell() {
 
         <nav className="main-nav" aria-label="Primary navigation">
           {navItems.map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => isActive ? 'active' : undefined}>
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              className={({ isActive }: { isActive: boolean }) => isActive ? 'active' : undefined}
+            >
               {label}
             </NavLink>
           ))}
