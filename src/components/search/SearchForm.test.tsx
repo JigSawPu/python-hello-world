@@ -1,8 +1,13 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/preact';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { MemoryRouter, useLocation } from 'react-router-dom';
 import { NetworkProvider } from '../../features/network/network.context';
 import { SearchForm } from './SearchForm';
+
+const router = vi.hoisted(() => ({ navigate: vi.fn() }));
+
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => router.navigate,
+}));
 
 vi.mock('../../hooks/useBitcoinProvider', () => ({
   useBitcoinProvider: () => ({
@@ -15,10 +20,6 @@ vi.mock('../../hooks/useBitcoinProvider', () => ({
   }),
 }));
 
-function LocationProbe() {
-  return <span data-testid="location">{useLocation().pathname}</span>;
-}
-
 beforeEach(() => window.localStorage.clear());
 afterEach(() => {
   cleanup();
@@ -29,10 +30,7 @@ describe('SearchForm', () => {
   it('resolves a block height and navigates to the block route', async () => {
     render(
       <NetworkProvider>
-        <MemoryRouter initialEntries={['/']}>
-          <SearchForm />
-          <LocationProbe />
-        </MemoryRouter>
+        <SearchForm />
       </NetworkProvider>,
     );
 
@@ -40,16 +38,14 @@ describe('SearchForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
 
     await waitFor(() => {
-      expect(screen.getByTestId('location').textContent).toBe(`/block/${'b'.repeat(64)}`);
+      expect(router.navigate).toHaveBeenCalledWith(`/block/${'b'.repeat(64)}`);
     });
   });
 
   it('shows local feedback for invalid input', () => {
     render(
       <NetworkProvider>
-        <MemoryRouter>
-          <SearchForm />
-        </MemoryRouter>
+        <SearchForm />
       </NetworkProvider>,
     );
 
