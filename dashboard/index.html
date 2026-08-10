@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="description" content="A fluid glass dashboard for Render services, deployments, GitHub links, and project history." />
+  <title>Project Ledger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="ambient ambient-c"></div>
+
+  <main class="app-shell">
+    <header class="topbar glass">
+      <div>
+        <p class="eyebrow">PROJECT MEMORY</p>
+        <h1>Project Ledger</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="refreshBtn" class="icon-button" aria-label="Refresh dashboard">↻</button>
+        <div class="avatar" aria-label="Workspace">JL</div>
+      </div>
+    </header>
+
+    <section class="hero glass">
+      <div class="hero-copy">
+        <span class="pill"><span class="status-dot live"></span> Live workspace</span>
+        <h2>Every service. Every deploy. One beautiful timeline.</h2>
+        <p>Track Render infrastructure alongside GitHub commits and the conversation history that created it.</p>
+      </div>
+      <div class="hero-stat">
+        <span id="serviceCount">—</span>
+        <small>Render services</small>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Workspace summary">
+      <article class="stat-card glass">
+        <span class="stat-label">Services</span>
+        <strong id="statServices">—</strong>
+        <span class="stat-sub">all environments</span>
+      </article>
+      <article class="stat-card glass">
+        <span class="stat-label">Live</span>
+        <strong id="statLive">—</strong>
+        <span class="stat-sub">healthy deployments</span>
+      </article>
+      <article class="stat-card glass">
+        <span class="stat-label">Deploys</span>
+        <strong id="statDeploys">—</strong>
+        <span class="stat-sub">recorded history</span>
+      </article>
+    </section>
+
+    <section class="section-head">
+      <div>
+        <p class="eyebrow">INFRASTRUCTURE</p>
+        <h3>Render services</h3>
+      </div>
+      <div class="filter-wrap glass-subtle">
+        <input id="serviceSearch" type="search" placeholder="Search services" aria-label="Search services" />
+      </div>
+    </section>
+
+    <section id="servicesGrid" class="service-grid" aria-live="polite"></section>
+
+    <section class="section-head timeline-head">
+      <div>
+        <p class="eyebrow">HISTORY</p>
+        <h3>Activity timeline</h3>
+      </div>
+      <button id="timelineFilter" class="text-button">All events</button>
+    </section>
+
+    <section id="timeline" class="timeline glass"></section>
+
+    <footer class="footer-note">
+      <span id="dataMode">Connecting to staging…</span>
+      <span>Project Ledger · Fluid Glass</span>
+    </footer>
+  </main>
+
+  <template id="serviceTemplate">
+    <article class="service-card glass">
+      <div class="service-topline">
+        <div class="service-icon">R</div>
+        <span class="service-status pill"></span>
+      </div>
+      <div>
+        <p class="service-type"></p>
+        <h4 class="service-name"></h4>
+        <p class="service-meta"></p>
+      </div>
+      <div class="service-links">
+        <a class="service-open" target="_blank" rel="noreferrer">Open</a>
+        <a class="service-dashboard" target="_blank" rel="noreferrer">Render ↗</a>
+      </div>
+    </article>
+  </template>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
