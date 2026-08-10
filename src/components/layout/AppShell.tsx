@@ -1,4 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import type { BitcoinNetwork } from '../../domain/network';
+import { NETWORKS } from '../../features/network/network.config';
+import { useBitcoinNetwork } from '../../features/network/network.context';
+import { useChainTip } from '../../hooks/useChainTip';
 
 const navItems = [
   ['/', 'Home'],
@@ -8,6 +12,10 @@ const navItems = [
 ] as const;
 
 export function AppShell() {
+  const { network, setNetwork } = useBitcoinNetwork();
+  const tip = useChainTip();
+  const apiState = tip.isPending ? 'Connecting' : tip.isError ? 'Offline' : 'Connected';
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -16,26 +24,28 @@ export function AppShell() {
             <span className="brand-mark" aria-hidden="true">₿</span>
             <span>Bitcoin Explorer</span>
           </NavLink>
-          <div className="network-pill" aria-label="Selected network">Mainnet</div>
+          <label className="network-control">
+            <span className="sr-only">Bitcoin network</span>
+            <select
+              aria-label="Bitcoin network"
+              value={network}
+              onChange={(event) => setNetwork(event.currentTarget.value as BitcoinNetwork)}
+            >
+              {Object.values(NETWORKS).map((item) => (
+                <option key={item.id} value={item.id}>{item.label}</option>
+              ))}
+            </select>
+          </label>
         </div>
 
         <form className="search-shell" onSubmit={(event) => event.preventDefault()} aria-label="Explorer search">
-          <input
-            aria-label="Search blocks, transactions, or addresses"
-            placeholder="Search block, transaction, or address"
-            disabled
-          />
+          <input aria-label="Search blocks, transactions, or addresses" placeholder="Search block, transaction, or address" disabled />
           <button type="submit" disabled>Search</button>
         </form>
 
         <nav className="main-nav" aria-label="Primary navigation">
           {navItems.map(([to, label]) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === '/'}
-              className={({ isActive }: { isActive: boolean }) => isActive ? 'active' : undefined}
-            >
+            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }: { isActive: boolean }) => isActive ? 'active' : undefined}>
               {label}
             </NavLink>
           ))}
@@ -43,13 +53,19 @@ export function AppShell() {
       </header>
 
       <main className="content-shell">
+        <section className={`api-banner api-${apiState.toLowerCase()}`} aria-live="polite">
+          <span>API: {apiState}</span>
+          <span>Network: {NETWORKS[network].label}</span>
+          <span>{tip.data !== undefined ? `Tip: ${tip.data.toLocaleString()}` : 'Tip: —'}</span>
+          {tip.isError && <button type="button" onClick={() => void tip.refetch()}>Retry</button>}
+        </section>
         <Outlet />
       </main>
 
       <footer className="app-footer">
-        <span>Static-first explorer foundation</span>
-        <span>Network: Mainnet</span>
-        <span>Data provider: pending Delivery 2</span>
+        <span>Esplora provider foundation</span>
+        <span>Network: {NETWORKS[network].label}</span>
+        <span>API: {apiState}</span>
       </footer>
     </div>
   );

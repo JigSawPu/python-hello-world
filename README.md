@@ -4,15 +4,21 @@ Static-first Bitcoin blockchain explorer built with Vite, TypeScript, Preact, Re
 
 ## Milestone 1 status
 
-Delivery 1 establishes the repository-ready application foundation:
+### Delivery 1 — complete
+- repository-ready Vite/Preact/TypeScript foundation
+- responsive shell and placeholder routes
+- GitHub Actions CI and Render deployment config
+- PWA foundation
 
-- Vite + Preact + TypeScript
-- responsive application shell
-- placeholder explorer routes
-- PWA manifest/service worker foundation
-- ESLint, Prettier, Vitest
-- GitHub Actions CI
-- Render static-site Blueprint with SPA rewrite
+### Delivery 2 — current
+- mainnet, testnet, and signet configuration
+- persisted network selector
+- BitcoinDataProvider abstraction
+- Esplora provider implementation
+- request timeout and normalized API errors
+- Zod response validation
+- TanStack Query defaults and network-scoped chain-tip query
+- visible API connection state and current tip height
 
 ## Commands
 
@@ -23,21 +29,20 @@ npm run check
 npm run build
 ```
 
+## Public API configuration
+
+```env
+VITE_MAINNET_API_URL=https://blockstream.info/api
+VITE_TESTNET_API_URL=https://blockstream.info/testnet/api
+VITE_SIGNET_API_URL=https://blockstream.info/signet/api
+```
+
+These values are public browser endpoints, not secrets.
+
 ## Deployment
 
-Render build command:
-
-```text
-npm install --no-audit --no-fund && npm run build
-```
+Render build command: `npm install --no-audit --no-fund && npm run build`
 
 Publish directory: `dist`
 
-The included `render.yaml` defines a catch-all rewrite from `/*` to `/index.html` so direct React Router URLs can load correctly.
-
-## Delivery branches
-
-- `bitcoin-explorer/delivery-1` — repository and deployment foundation
-- Delivery 2 — Bitcoin provider and network infrastructure
-- Delivery 3 — search foundation
-- Delivery 4 — final Milestone 1 validation and testing
+`render.yaml` includes the required SPA rewrite from `/*` to `/index.html`.

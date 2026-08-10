@@ -1,12 +1,19 @@
 services:
   - type: web
     runtime: static
-    name: bitcoin-explorer-delivery-1
+    name: bitcoin-explorer-delivery-2
     repo: https://github.com/JigSawPu/python-hello-world
-    branch: bitcoin-explorer/delivery-1
+    branch: bitcoin-explorer/delivery-2
     buildCommand: npm install --no-audit --no-fund && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_MAINNET_API_URL
+        value: https://blockstream.info/api
+      - key: VITE_TESTNET_API_URL
+        value: https://blockstream.info/testnet/api
+      - key: VITE_SIGNET_API_URL
+        value: https://blockstream.info/signet/api
     routes:
       - type: rewrite
         source: /*

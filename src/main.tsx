@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './app/App';
+import { AppProviders } from './app/providers';
 import './styles/global.css';
 
 const root = document.getElementById('app');
@@ -10,8 +11,10 @@ if (!root) {
 }
 
 render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <AppProviders>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </AppProviders>,
   root,
 );
